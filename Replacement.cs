@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace BulkReplace
@@ -34,8 +35,10 @@ namespace BulkReplace
         public void ParseFile(string filename)
         {
             string contents;
-            using (var reader = new StreamReader(filename))
+            Encoding encoding;
+            using (var reader = new StreamReader(filename, true))
             {
+                encoding = reader.CurrentEncoding;
                 contents = reader.ReadToEnd();
             }
             
@@ -44,7 +47,7 @@ namespace BulkReplace
                 contents = contents.Replace(item.Replace, item.With);
             }
 
-            using (var writer = new StreamWriter(filename))
+            using (var writer = new StreamWriter(filename, false, encoding))
             {
                 writer.Write(contents);
                 writer.Flush();
